@@ -1,4 +1,6 @@
 Set-Alias g git
+Set-Alias p pnpm
+Set-Alias i wind
 
 # To be compatible with @antfu/ni
 Remove-Item Alias:ni -Force -ErrorAction Ignore
@@ -21,12 +23,6 @@ function npmsetup {
   nrm use taobao
 }
 
-# Fonts
-function fontsetup {
-  scoop bucket add nerd-fonts
-  scoop install FiraCode
-}
-
 # powershell extension
 function powershellsetup {
   scoop bucket add extras
@@ -34,27 +30,27 @@ function powershellsetup {
   scoop install psreadline
   # Auto jump
   scoop install zlocation
-  # A PowerShell environment for Git
-  scoop install posh-git
-  Add-PoshGitToProfile
+}
+
+# git global configuration
+function gitsetup {
+  g config --global core.autocrlf input
+  g config --global https.proxy "socks5://127.0.0.1:7890"
 }
 
 function nio { ni --prefer-offline }
-function s { nr start }
+function st { nr start }
+function s { nr serve }
 function d { nr dev }
 function b { nr build }
 function t { nr test }
 function tu { nr test -u }
 function lint { nr lint }
 function lintfix { nr lint --fix }
-function gpl { git pull }
-function gp { git push }
-function i { Set-Location D:\wind }
+function gl { g pull }
+function gpl { g pull }
+function gp { g push }
+function gb { g branch }
 function wind { Set-Location D:\wind }
 function gh { Set-Location D:\github }
 function pns { Set-Location D:\pns }
-function npmrc { echo 'shamefully-hoist=true' >> .npmrc }
-
-# Set gitconfig
-function closeautocrlf { git config --global core.autocrlf false }
-
