@@ -51,6 +51,7 @@ function gl { g pull }
 function gpl { g pull }
 function gp { g push }
 function gb { g branch }
+function ofd { Invoke-Item . }
 function wind { Set-Location D:\wind }
 function gh { Set-Location D:\github }
 function pns { Set-Location D:\pns }
