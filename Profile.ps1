@@ -17,25 +17,24 @@ $Env:https_proxy="socks5://127.0.0.1:7890"
 # Manually set all proxy
 function proxy { $Env:all_proxy = "socks5://127.0.0.1:7890" }
 
-# Install NPM global package and set registry mirror
-function npmsetup {
-  npm install --global @antfu"/"ni pnpm yarn nrm
-  nrm use taobao
-}
+function bootstrap {
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+  Invoke-RestMethod get.scoop.sh -outfile 'install.ps1'
+  .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\GlobalScoopApps'
 
-# powershell extension
-function powershellsetup {
-  scoop bucket add extras
-  # Auto suggestions
-  scoop install psreadline
-  # Auto jump
-  scoop install zlocation
-}
-
-# git global configuration
-function gitsetup {
+  scoop install git nvm
   g config --global core.autocrlf input
   g config --global https.proxy "socks5://127.0.0.1:7890"
+  nvm install lts
+  nvm use lts
+  npm install --global @antfu/ni pnpm yarn nrm
+  nrm use taobao
+
+  scoop bucket add extras
+  scoop install posh-git notepadplusplus psreadline zlocation
+
+  scoop bucket add nerd-fonts
+  scoop install nerd-fonts/FiraCode
 }
 
 function nio { ni --prefer-offline }

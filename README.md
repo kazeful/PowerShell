@@ -8,5 +8,6 @@ New-Item -Path $PROFILE -Type File -Force
 # 导入
 
 ```
-~\Documents\WindowsPowerShell\Profile.ps1
+Import-Module ~\Documents\WindowsPowerShell\Profile.ps1
+Import-Module posh-git
 ```
