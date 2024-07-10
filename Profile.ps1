@@ -1,6 +1,5 @@
 Set-Alias g git
 Set-Alias p pnpm
-Set-Alias i wind
 
 # To be compatible with @antfu/ni
 Remove-Item Alias:ni -Force -ErrorAction Ignore
@@ -20,7 +19,7 @@ function proxy { $Env:all_proxy = "socks5://127.0.0.1:7890" }
 function bootstrap {
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
   Invoke-RestMethod get.scoop.sh -outfile 'install.ps1'
-  .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\GlobalScoopApps'
+  .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\Applications\GlobalScoopApps'
 
   scoop install git nvm
   g config --global core.autocrlf input
@@ -31,7 +30,7 @@ function bootstrap {
   nrm use taobao
 
   scoop bucket add extras
-  scoop install posh-git notepadplusplus psreadline zlocation
+  scoop install posh-git psreadline zlocation
 
   scoop bucket add nerd-fonts
   scoop install nerd-fonts/FiraCode
@@ -51,6 +50,5 @@ function gpl { g pull }
 function gp { g push }
 function gb { g branch }
 function ofd { Invoke-Item . }
-function wind { Set-Location D:\wind }
-function gh { Set-Location D:\github }
-function pns { Set-Location D:\pns }
+function i { Set-Location D:\Project\i }
+function f { Set-Location D:\Project\fork }
