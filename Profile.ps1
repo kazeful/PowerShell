@@ -11,7 +11,7 @@ Remove-Item Alias:gp -Force -ErrorAction Ignore
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
 # Only need to set https proxy in general
-$Env:https_proxy="socks5://127.0.0.1:7890"
+$Env:https_proxy = "socks5://127.0.0.1:7890"
 
 # Manually set all proxy
 function proxy { $Env:all_proxy = "socks5://127.0.0.1:7890" }
@@ -21,12 +21,12 @@ function bootstrap {
   Invoke-RestMethod get.scoop.sh -outfile 'install.ps1'
   .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\Applications\GlobalScoopApps'
 
-  scoop install git nvm
+  scoop install git nvm pnpm
   g config --global core.autocrlf input
   g config --global https.proxy "socks5://127.0.0.1:7890"
   nvm install lts
   nvm use lts
-  npm install --global @antfu/ni pnpm yarn nrm
+  npm install --global @antfu/ni yarn nrm
   nrm use taobao
 
   scoop bucket add extras
@@ -49,6 +49,70 @@ function gl { g pull }
 function gpl { g pull }
 function gp { g push }
 function gb { g branch }
-function ofd { Invoke-Item . }
-function i { Set-Location D:\Project\i }
-function f { Set-Location D:\Project\fork }
+
+# function ofd { Invoke-Item . }
+function ofd {
+  Start-Process explorer.exe -ArgumentList (Get-Location).Path
+}
+
+function i {
+  param(
+    [switch]$a
+  )
+
+  $basePath = "D:\i"
+
+  if (-not $null -eq $args[0]) {
+    $projectPath = Join-Path -Path $basePath -ChildPath $args[0]
+
+    if (Test-Path $projectPath) {
+      Set-Location -Path $projectPath
+    }
+    else {
+      Write-Host ($args[0] + " does not exist")
+
+      if ($a -eq $true) {
+        New-Item -Path $projectPath -ItemType Directory
+      }
+
+      $confirmation = Read-Host "Are you creating a new project? (Y/N)"
+      if ($confirmation -eq 'Y') {
+        New-Item -Path $projectPath -ItemType Directory
+      }
+    }
+  }
+  else {
+    Set-Location -Path $basePath
+  }
+}
+
+function f {
+  param(
+    [switch]$a
+  )
+
+  $basePath = "D:\fork"
+
+  if (-not $null -eq $args[0]) {
+    $projectPath = Join-Path -Path $basePath -ChildPath $args[0]
+
+    if (Test-Path $projectPath) {
+      Set-Location -Path $projectPath
+    }
+    else {
+      Write-Host ($args[0] + " does not exist")
+
+      if ($a -eq $true) {
+       New-Item -Path $projectPath -ItemType Directory
+      }
+
+      $confirmation = Read-Host "Are you creating a new project? (Y/N)"
+      if ($confirmation -eq 'Y') {
+        New-Item -Path $projectPath -ItemType Directory
+      }
+    }
+  }
+  else {
+    Set-Location -Path $basePath
+  }
+}
