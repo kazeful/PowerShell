@@ -74,10 +74,11 @@ function i {
       if ($a -eq $true) {
         New-Item -Path $projectPath -ItemType Directory
       }
-
-      $confirmation = Read-Host "Are you creating a new project? (Y/N)"
-      if ($confirmation -eq 'Y') {
-        New-Item -Path $projectPath -ItemType Directory
+      else {
+        $confirmation = Read-Host "Are you creating a new project? (Y/N)"
+        if ($confirmation -eq 'Y') {
+          New-Item -Path $projectPath -ItemType Directory
+        }
       }
     }
   }
@@ -105,14 +106,22 @@ function f {
       if ($a -eq $true) {
        New-Item -Path $projectPath -ItemType Directory
       }
-
-      $confirmation = Read-Host "Are you creating a new project? (Y/N)"
-      if ($confirmation -eq 'Y') {
-        New-Item -Path $projectPath -ItemType Directory
+      else {
+        $confirmation = Read-Host "Are you creating a new project? (Y/N)"
+        if ($confirmation -eq 'Y') {
+          New-Item -Path $projectPath -ItemType Directory
+        }
       }
     }
   }
   else {
     Set-Location -Path $basePath
+  }
+}
+
+
+function rmrf {
+  if (-not $null -eq $args[0]) {
+    Remove-Item -Recurse -Force $args[0]
   }
 }
