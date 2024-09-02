@@ -11,23 +11,26 @@ Remove-Item Alias:gp -Force -ErrorAction Ignore
 Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 
 # Only need to set https proxy in general
-$Env:https_proxy = "socks5://127.0.0.1:7890"
+# $Env:https_proxy = "socks5://127.0.0.1:7890"
 
 # Manually set all proxy
 function proxy { $Env:all_proxy = "socks5://127.0.0.1:7890" }
 
 function bootstrap {
+  # install pnpm and node
+  Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+  pnpm env use --global lts
+  pnpm install --global @antfu/ni nrm
+  nrm use taobao
+
+  # install scoop
   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
   Invoke-RestMethod get.scoop.sh -outfile 'install.ps1'
   .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\Applications\GlobalScoopApps'
 
-  scoop install git nvm pnpm
-  g config --global core.autocrlf input
-  g config --global https.proxy "socks5://127.0.0.1:7890"
-  nvm install lts
-  nvm use lts
-  npm install --global @antfu/ni yarn nrm
-  nrm use taobao
+  scoop install git
+  git config --global core.autocrlf input
+  git config --global https.proxy "socks5://127.0.0.1:7890"
 
   scoop bucket add extras
   scoop install posh-git psreadline zlocation
@@ -50,10 +53,7 @@ function gpl { g pull }
 function gp { g push }
 function gb { g branch }
 
-# function ofd { Invoke-Item . }
-function ofd {
-  Start-Process explorer.exe -ArgumentList (Get-Location).Path
-}
+function ofd { Invoke-Item . }
 
 function i {
   param(
