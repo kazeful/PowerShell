@@ -101,7 +101,7 @@ function f {
       Set-Location -Path $projectPath
     }
     else {
-      Write-Host ($args[0] + " does not exist")
+      Write-Host ("$($args[0]) does not exist")
 
       if ($a -eq $true) {
        New-Item -Path $projectPath -ItemType Directory
@@ -124,4 +124,20 @@ function rmrf {
   if (-not $null -eq $args[0]) {
     Remove-Item -Recurse -Force $args[0]
   }
+}
+
+
+function clone {
+  param(
+    [switch]$s,
+    [switch]$shallow
+  )
+
+  $cloneDepth = if ($s -eq $true -Or $shallow -eq $true) { "--depth=1" } else { $null }
+
+  # Invoke-Expression "git clone $cloneDepth $($args[0]) $($args[1])"
+  git clone $cloneDepth $args[0] $args[1]
+
+  $repoName = if (-not $null -eq $args[1]) { $args[1] } else { $args[0] }
+  Set-Location ($repoName -replace '^.*/([^/]+?)(\.git)?$', '$1')
 }
