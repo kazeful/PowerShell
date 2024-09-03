@@ -31,12 +31,14 @@ function bootstrap {
   scoop install git
   git config --global core.autocrlf input
   git config --global https.proxy "socks5://127.0.0.1:7890"
+  git config --global alias.sclone "clone --depth 1"
 
   scoop bucket add extras
   scoop install posh-git psreadline zlocation
+  scoop install https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/oh-my-posh.json
 
   scoop bucket add nerd-fonts
-  scoop install nerd-fonts/FiraCode
+  scoop install nerd-fonts/FiraCode nerd-fonts/Meslo-NF
 }
 
 function nio { ni --prefer-offline }
@@ -104,7 +106,7 @@ function f {
       Write-Host ("$($args[0]) does not exist")
 
       if ($a -eq $true) {
-       New-Item -Path $projectPath -ItemType Directory
+        New-Item -Path $projectPath -ItemType Directory
       }
       else {
         $confirmation = Read-Host "Are you creating a new project? (Y/N)"
@@ -119,13 +121,11 @@ function f {
   }
 }
 
-
 function rmrf {
   if (-not $null -eq $args[0]) {
     Remove-Item -Recurse -Force $args[0]
   }
 }
-
 
 function clone {
   param(
