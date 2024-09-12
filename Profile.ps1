@@ -17,6 +17,8 @@ Set-PSReadlineKeyHandler -Key Tab -Function MenuComplete
 function proxy { $Env:all_proxy = "socks5://127.0.0.1:7890" }
 
 function bootstrap {
+  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+
   # install pnpm and node
   Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
   pnpm env use --global lts
@@ -24,7 +26,6 @@ function bootstrap {
   nrm use taobao
 
   # install scoop
-  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
   Invoke-RestMethod get.scoop.sh -outfile 'install.ps1'
   .\install.ps1 -ScoopDir 'D:\Applications\Scoop' -ScoopGlobalDir 'D:\Applications\GlobalScoopApps'
 
@@ -41,6 +42,20 @@ function bootstrap {
   scoop install nerd-fonts/FiraCode nerd-fonts/Meslo-NF
 }
 
+function Reload-Profile {
+  @(
+    $Profile.AllUsersAllHosts,
+    $Profile.AllUsersCurrentHost,
+    $Profile.CurrentUserAllHosts,
+    $Profile.CurrentUserCurrentHost
+  ) | ForEach-Object {
+
+    if(Test-Path $_){
+      Write-Host ("Running $_") -foregroundcolor Magenta
+      . $_
+    }
+  }
+}
 function nio { ni --prefer-offline }
 function st { nr start }
 function s { nr serve }
@@ -71,7 +86,7 @@ function i {
       Set-Location -Path $projectPath
     }
     else {
-      Write-Host ($args[0] + " does not exist")
+      Write-Host ($args[0] + " does not exist") -foregroundcolor Red
 
       if ($a -eq $true) {
         New-Item -Path $projectPath -ItemType Directory
@@ -103,7 +118,7 @@ function f {
       Set-Location -Path $projectPath
     }
     else {
-      Write-Host ("$($args[0]) does not exist")
+      Write-Host ("$($args[0]) does not exist") -foregroundcolor Red
 
       if ($a -eq $true) {
         New-Item -Path $projectPath -ItemType Directory
